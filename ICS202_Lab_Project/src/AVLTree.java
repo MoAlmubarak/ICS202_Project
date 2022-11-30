@@ -156,7 +156,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
             Scanner sc = new Scanner(f);
             while (sc.hasNextLine()) {
                 String s = sc.nextLine();
-                insertAVL((T) s);
+                this.insertAVL((T) s);
             }
             sc.close();
         } catch (FileNotFoundException e) {
@@ -168,8 +168,8 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     // [public void addWord(String s)], if the word is already present, it should throw
     // an exception.
     public void addWord(String s) {
-        if (search((T) s) == null) {
-            insertAVL((T) s);
+        if (this.search((T) s) == null) {
+            this.insertAVL((T) s);
         } else {
             throw new InvalidDnDOperationException("Word already exists");
         }
@@ -179,7 +179,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
 // [public boolean searchWord(String s)], if the word is found, it should return true,
 // otherwise it should return false.
     public boolean searchWord(String s) {
-        return search((T) s) != null;
+        return this.search((T) s) != null;
     }
 
     // Delete word This method deletes a word (string) from the existing dictionary
@@ -188,7 +188,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         if (this.search((T) s) == null) {
             throw new InvalidDnDOperationException("Word does not exist");
         } else {
-            deleteAVL((T) s);
+            this.deleteAVL((T) s);
         }
     }
 

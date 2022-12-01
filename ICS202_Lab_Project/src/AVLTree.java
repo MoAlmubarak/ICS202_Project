@@ -65,13 +65,13 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
             int balanceFactor = getBalanceFactor();
 
             if (balanceFactor == -2) {
-                System.out.println("Balancing node with el: " + root.el);
+                //System.out.println("Balancing node with el: " + root.el);
                 if (getLeftAVL().getBalanceFactor() < 0)
                     rotateRight();
                 else
                     rotateLeftRight();
             } else if (balanceFactor == 2) {
-                System.out.println("Balancing node with el: " + root.el);
+                //System.out.println("Balancing node with el: " + root.el);
                 if (getRightAVL().getBalanceFactor() > 0)
                     rotateLeft();
                 else
@@ -88,7 +88,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     protected void rotateRight() {
-        System.out.println("RIGHT ROTATION");
+        //System.out.println("RIGHT ROTATION");
         // Q1
         BSTNode<T> tempNode = root.right;
         root.right = root.left;
@@ -105,7 +105,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     protected void rotateLeft() {
-        System.out.println("LEFT ROTATION");
+        //fSystem.out.println("LEFT ROTATION");
         BSTNode<T> tempNode = root.left;
         root.left = root.right;
         root.right = root.left.right;
@@ -121,7 +121,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     protected void rotateLeftRight() {
-        System.out.println("Double Rotation...");
+        //System.out.println("Double Rotation...");
         // Q1
         getLeftAVL().rotateLeft();
         getLeftAVL().adjustHeight();
@@ -131,7 +131,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     protected void rotateRightLeft() {
-        System.out.println("Double Rotation...");
+        //System.out.println("Double Rotation...");
         getRightAVL().rotateRight();
         getRightAVL().adjustHeight();
         this.rotateLeft();
@@ -150,7 +150,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         height = -1;
     }
 
-    // create a text file having strings, each on a new line. [public Dictionary(File f)]
+    // create a text file having strings, each on a new line.
     public void Dictionary(File f) {
         try {
             Scanner sc = new Scanner(f);
@@ -165,8 +165,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     // Add new word, This method adds a new word (string) to the existing dictionary
-    // [public void addWord(String s)], if the word is already present, it should throw
-    // an exception.
+    // if the word is already in the dictionary, it should throw an exception.
     public void addWord(String s) {
         if (this.search((T) s) == null) {
             this.insertAVL((T) s);
@@ -176,15 +175,14 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     // Search for word This method searches for a word (string) in the existing dictionary
-// [public boolean searchWord(String s)], if the word is found, it should return true,
-// otherwise it should return false.
+    // if the word is found, it should return true, otherwise it should return false.
     public boolean searchWord(String s) {
         return this.search((T) s) != null;
     }
 
-    // Delete word This method deletes a word (string) from the existing dictionary
-    // [public void deleteWord(String s)], if the word is not present, it should throw an exception.
-    public void deleteWord(String s) {
+    // Delete word This method deletes a word (string) from the existing dictionary, if the word is not in the dictionary,
+    // it should throw an exception.
+    public void deleteWord(String s) throws InvalidDnDOperationException {
         if (this.search((T) s) == null) {
             throw new InvalidDnDOperationException("Word does not exist");
         } else {
@@ -192,25 +190,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         }
     }
 
-    //Search for similar words This method searches for words that are similar to a given word s.
-    // By similar, we mean that the string s differs in exactly 1 letter only with the words in the dictionary.
-    // [public String[ ] findSimilar (String s)]
-    public String[] findSimilar(String s) {
-        String[] similarWords = new String[100];
-        int count = 0;
-        for (int i = 0; i < s.length(); i++) {
-            for (char c = 'a'; c <= 'z'; c++) {
-                String temp = s.substring(0, i) + c + s.substring(i + 1);
-                if (search((T) temp) != null) {
-                    similarWords[count] = temp;
-                    count++;
-                }
-            }
-        }
-        return similarWords;
-    }
-
-    // print the dictionary in sorted order [public void printDictionary()]
+    // print the dictionary in sorted order.
     public void printDictionary() {
         inorder();
     }

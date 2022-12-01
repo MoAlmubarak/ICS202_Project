@@ -4,34 +4,50 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        File file = new File("C:\\Users\\hp-pc\\Desktop\\ICS202 Lab\\ICS202_Project\\Doc\\Try.txt");
-        AVLTree<String> t1 = new AVLTree<String>();
-        t1.Dictionary(file);
-        System.out.println(t1.searchWord("aarhus"));
-        // delete a word from the dictionary
-         t1.deleteWord("aarhus");
-         System.out.println(t1.searchWord("aarhus"));
-        // add new words to the dictionary
-//        t1.printDictionary();
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the file name> ");
+        String fileName = input.nextLine();
+        try {
+            File file = new File(fileName);
+            AVLTree<String> t1 = new AVLTree<String>();
+            t1.Dictionary(file);
+            System.out.println("Dictionary loaded successfully.");
+            System.out.println("Enter the number which corresponds to the operation you want to perform.");
+            System.out.println("1. Insert a word\n2. Delete a word\n3. Search a word\n4. Print the dictionary\n5. Exit");
+            int choice = input.nextInt();
+            while (choice != 5) {
+                switch (choice) {
+                    case 1 -> {
+                        System.out.println("add new word> ");
+                        String word0 = input.next();
+                        t1.addWord(word0);
+                        System.out.println("Word added successfully.");
+                    }
+                    case 2 -> {
+                        System.out.println("remove word> ");
+                        String word1 = input.next();
+                        t1.deleteWord(word1);
+                        System.out.println("Word removed successfully.");
+                    }
+                    case 3 -> {
+                        System.out.println("check word> ");
+                        String word2 = input.next();
+                        if (t1.searchWord(word2)) {
+                            System.out.println("Word found.");
+                        } else {
+                            System.out.println("Word not found.");
+                        }
+                    }
+                    case 4 -> t1.printDictionary();
+                    default -> System.out.println("Invalid choice.");
+                }
+                System.out.println("\nEnter the number which corresponds to the operation you want to perform.");
+                System.out.println("1. Insert a word\n2. Delete a word\n3. Search a word\n4. Print the dictionary\n5. Exit");
+                choice = input.nextInt();
+            }
 
-
-//        // read the text file.
-//        try {
-//            AVLTree<String> t3 = new AVLTree<String>();
-//            String tmp;
-//            File file = new File("C:\\Users\\hp-pc\\Desktop\\ICS202 Lab\\ICS202_Project\\Doc\\mydictionary.txt");
-//            Scanner input2 = new Scanner(file);
-//            while (input2.hasNext()) {
-//                tmp = input2.next();
-//                if (!t3.isInTree(tmp))
-//                    t3.insertAVL(tmp);
-//            }
-//            // Printing inorder
-//            t3.inorder();
-//            System.out.println();
-//
-//        } catch (FileNotFoundException e) {
-//            System.out.println(e.getMessage());
-//        }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -174,7 +174,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         }
     }
 
-    // Search for word This method searches for a word (string) in the existing dictionary
+    // Search for word, This method searches for a word in the existing dictionary
     // if the word is found, it should return true, otherwise it should return false.
     public boolean searchWord(String s) {
         return this.search((T) s) != null;

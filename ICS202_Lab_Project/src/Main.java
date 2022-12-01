@@ -12,8 +12,8 @@ public class Main {
             AVLTree<String> t1 = new AVLTree<String>();
             t1.Dictionary(file);
             System.out.println("Dictionary loaded successfully.");
-            System.out.println("Enter the number which corresponds to the operation you want to perform.");
-            System.out.println("1. Insert a word\n2. Delete a word\n3. Search a word\n4. Print the dictionary\n5. Exit");
+            System.out.println("Enter the number which corresponds to the operation you want.");
+            System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
             int choice = input.nextInt();
             while (choice != 5) {
                 switch (choice) {
@@ -41,8 +41,8 @@ public class Main {
                     case 4 -> t1.printDictionary();
                     default -> System.out.println("Invalid choice.");
                 }
-                System.out.println("\nEnter the number which corresponds to the operation you want to perform.");
-                System.out.println("1. Insert a word\n2. Delete a word\n3. Search a word\n4. Print the dictionary\n5. Exit");
+                System.out.println("\nEnter the number which corresponds to the operation you want.");
+                System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
                 choice = input.nextInt();
             }
 

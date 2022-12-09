@@ -1,16 +1,20 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter the file name> ");
-        String fileName = input.nextLine();
+    public static void main(String[] args) {
+//        Scanner input = new Scanner(System.in);
+//        System.out.println("Enter the string> ");
+//        String string = input.nextLine();
+//        Dictionary t1 = new Dictionary();
+//        System.out.println("Dictionary created successfully.");
         try {
+            Scanner input = new Scanner(System.in);
+            System.out.println("Enter the file name> ");
+            String fileName = input.nextLine();
             File file = new File(fileName);
-            AVLTree<String> t1 = new AVLTree<String>();
-            t1.Dictionary(file);
+            Dictionary t1 = new Dictionary(file);
             System.out.println("Dictionary loaded successfully.");
             System.out.println("Enter the number which corresponds to the operation you want.");
             System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
@@ -45,9 +49,27 @@ public class Main {
                 System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
                 choice = input.nextInt();
             }
+            System.out.println("Height: "+t1.getHeight());
+        }
 
-        } catch (Exception e) {
+        catch (FileNotFoundException e) {
             e.printStackTrace();
+            System.out.println("******Error: file not found.******");
+        }
+
+        catch (WordAlreadyExistsException e) {
+            e.printStackTrace();
+            System.out.println("******Error: word already exists.******");
+        }
+
+        catch (WordNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("******Error: word not found in dictionary.******");
+        }
+
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("******Unknown error.******");
         }
     }
 }

@@ -1,6 +1,4 @@
 import java.awt.dnd.InvalidDnDOperationException;
-import java.io.*;
-import java.util.Scanner;
 
 public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
 
@@ -13,7 +11,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
 
     public AVLTree(BSTNode<T> root) {
         super(root);
-        height = -1;
+        height = 0;
     }
 
     public int getHeight() {
@@ -21,7 +19,7 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     private int getHeight(BSTNode<T> node) {
-        if (node == null)
+        if(node == null)
             return -1;
         else
             return 1 + Math.max(getHeight(node.left), getHeight(node.right));
@@ -38,25 +36,27 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
     }
 
     protected int getBalanceFactor() {
-        if (isEmpty())
+        if(isEmpty())
             return 0;
         else
             return getRightAVL().getHeight() - getLeftAVL().getHeight();
     }
 
-    public void insertAVL(T el) {
+    public void insertAVL(T el)  {
         super.insert(el);
         this.balance();
     }
 
     public void deleteAVL(T el) {
-        // Q1
-        super.deleteByCopying(el);
-        this.balance();
+        //Q1
+        super.deleteByCopying(el); // Use the BST delete by copying (or by merging)
+        this.balance(); // Balance the AVL tree after deleting
     }
 
-    protected void balance() {
-        if (!isEmpty()) {
+    protected void balance()
+    {
+        if(!isEmpty())
+        {
             getLeftAVL().balance();
             getRightAVL().balance();
 
@@ -64,15 +64,17 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
 
             int balanceFactor = getBalanceFactor();
 
-            if (balanceFactor == -2) {
-                //System.out.println("Balancing node with el: " + root.el);
-                if (getLeftAVL().getBalanceFactor() < 0)
+            if(balanceFactor == -2) {
+//                System.out.println("Balancing node with el: "+root.el);
+                if(getLeftAVL().getBalanceFactor() < 0)
                     rotateRight();
                 else
                     rotateLeftRight();
-            } else if (balanceFactor == 2) {
-                //System.out.println("Balancing node with el: " + root.el);
-                if (getRightAVL().getBalanceFactor() > 0)
+            }
+
+            else if(balanceFactor == 2) {
+//                System.out.println("Balancing node with el: "+root.el);
+                if(getRightAVL().getBalanceFactor() > 0)
                     rotateLeft();
                 else
                     rotateRightLeft();
@@ -80,32 +82,36 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         }
     }
 
-    protected void adjustHeight() {
-        if (isEmpty())
+    protected void adjustHeight()
+    {
+        if(isEmpty())
             height = -1;
         else
             height = 1 + Math.max(getLeftAVL().getHeight(), getRightAVL().getHeight());
     }
 
-    protected void rotateRight() {
-        //System.out.println("RIGHT ROTATION");
-        // Q1
-        BSTNode<T> tempNode = root.right;
-        root.right = root.left;
-        root.left = root.right.left;
-        root.right.left = root.right.right;
-        root.right.right = tempNode;
+    protected void rotateRight() throws UnsupportedOperationException {
+//        System.out.println("RIGHT ROTATION");
+        //Q1
 
-        T val = (T) root.el;
-        root.el = root.right.el;
-        root.right.el = val;
+        if (this.isEmpty()) throw new UnsupportedOperationException("AVLTree is empty"); // If the AVLTree is empty throw an exception
 
-        getRightAVL().adjustHeight();
-        adjustHeight();
+        BSTNode<T> tempNode = root.right; // Save the right node to be used later
+        root.right = root.left; // Flip the right and left nodes
+        root.left = root.right.left; // Transfer the right-left node to the left
+        root.right.left = root.right.right; // Transfer the right-right node to the right-left
+        root.right.right = tempNode; // Reassign the temp value to the right-right node
+
+        T val = (T) root.el; // Save the value of the root node to be swapped later.
+        root.el = root.right.el; // Save the root node's value
+        root.right.el = val; // Assign the right node's value with the
+
+        getRightAVL().adjustHeight(); // Recalculate/Adjust the height of the right AVL tree
+        adjustHeight(); // Adjust the height of the root node
     }
 
     protected void rotateLeft() {
-        //fSystem.out.println("LEFT ROTATION");
+//        System.out.println("LEFT ROTATION");
         BSTNode<T> tempNode = root.left;
         root.left = root.right;
         root.right = root.left.right;
@@ -120,78 +126,23 @@ public class AVLTree<T extends Comparable<? super T>> extends BST<T> {
         adjustHeight();
     }
 
-    protected void rotateLeftRight() {
-        //System.out.println("Double Rotation...");
-        // Q1
-        getLeftAVL().rotateLeft();
-        getLeftAVL().adjustHeight();
-        this.rotateRight();
-        this.adjustHeight();
+    protected void rotateLeftRight()
+    {
+//        System.out.println("Double Rotation...");
+        //Q1
 
+        getLeftAVL().rotateLeft(); // Rotate left the left AVL tree
+        getLeftAVL().adjustHeight(); // Adjust the height of previously rotated left AVL tree
+        this.rotateRight(); // Rotate right the root AVL tree
+        this.adjustHeight(); // Adjust the height of the root tree
     }
 
-    protected void rotateRightLeft() {
-        //System.out.println("Double Rotation...");
+    protected void rotateRightLeft()
+    {
+//        System.out.println("Double Rotation...");
         getRightAVL().rotateRight();
         getRightAVL().adjustHeight();
         this.rotateLeft();
         this.adjustHeight();
-    }
-
-    // creates a dictionary with only 1 string s.
-    public void Dictionary(String s) {
-        root = new BSTNode<T>((T) s);
-        height = 0;
-    }
-
-    // creates an empty dictionary [public Dictionary( )]
-    public void Dictionary() {
-        root = null;
-        height = -1;
-    }
-
-    // create a text file having strings, each on a new line.
-    public void Dictionary(File f) {
-        try {
-            Scanner sc = new Scanner(f);
-            while (sc.hasNextLine()) {
-                String s = sc.nextLine();
-                this.insertAVL((T) s);
-            }
-            sc.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Add new word, This method adds a new word (string) to the existing dictionary
-    // if the word is already in the dictionary, it should throw an exception.
-    public void addWord(String s) {
-        if (this.search((T) s) == null) {
-            this.insertAVL((T) s);
-        } else {
-            throw new InvalidDnDOperationException("Word already exists");
-        }
-    }
-
-    // Search for word, This method searches for a word in the existing dictionary
-    // if the word is found, it should return true, otherwise it should return false.
-    public boolean searchWord(String s) {
-        return this.search((T) s) != null;
-    }
-
-    // Delete word This method deletes a word (string) from the existing dictionary, if the word is not in the dictionary,
-    // it should throw an exception.
-    public void deleteWord(String s) throws InvalidDnDOperationException {
-        if (this.search((T) s) == null) {
-            throw new InvalidDnDOperationException("Word does not exist");
-        } else {
-            this.deleteAVL((T) s);
-        }
-    }
-
-    // print the dictionary in sorted order.
-    public void printDictionary() {
-        inorder();
     }
 }

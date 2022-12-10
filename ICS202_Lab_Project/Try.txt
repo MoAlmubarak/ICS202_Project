@@ -15,3 +15,7 @@ abash
 abate
 abater
 abbas
+painter
+pointer
+printer
+punter

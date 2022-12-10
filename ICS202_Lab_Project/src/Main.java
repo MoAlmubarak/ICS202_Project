@@ -1,75 +1,155 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+    private static Scanner userInput;
+
     public static void main(String[] args) {
-//        Scanner input = new Scanner(System.in);
-//        System.out.println("Enter the string> ");
-//        String string = input.nextLine();
-//        Dictionary t1 = new Dictionary();
-//        System.out.println("Dictionary created successfully.");
+        userInput = new Scanner(System.in);
+        System.out.println(
+                "1. Create a dictionary and initialize it with a text file\n" +
+                        "2. Create a dictionary and initialize it with a given single word\n" +
+                        "3. Create an empty dictionary\n" +
+                        "To quit, enter any other key.");
+        System.out.print("\nEnter your choice> ");
+
+        String choice = userInput.next();
+
+        switch (choice) {
+            case "1" -> fileDictionaryTest();
+            case "2" -> oneWordDictionaryTest();
+            case "3" -> emptyDictionaryTest();
+            default -> userInput.close(); // No need to keep the scanner object alive anymore
+        }
+    }
+
+    public static void fileDictionaryTest() {
         try {
-            Scanner input = new Scanner(System.in);
-            System.out.println("Enter the file name> ");
-            String fileName = input.nextLine();
-            File file = new File(fileName);
-            Dictionary t1 = new Dictionary(file);
+            userInput = new Scanner(System.in);
+            System.out.print("\nEnter the file name> ");
+            Dictionary testDictionary = new Dictionary(new File(userInput.nextLine()));
             System.out.println("Dictionary loaded successfully.");
-            System.out.println("Enter the number which corresponds to the operation you want.");
-            System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
-            int choice = input.nextInt();
-            while (choice != 5) {
-                switch (choice) {
-                    case 1 -> {
-                        System.out.println("add new word> ");
-                        String word0 = input.next();
-                        t1.addWord(word0);
-                        System.out.println("Word added successfully.");
-                    }
-                    case 2 -> {
-                        System.out.println("remove word> ");
-                        String word1 = input.next();
-                        t1.deleteWord(word1);
-                        System.out.println("Word removed successfully.");
-                    }
-                    case 3 -> {
-                        System.out.println("check word> ");
-                        String word2 = input.next();
-                        if (t1.searchWord(word2)) {
-                            System.out.println("Word found.");
-                        } else {
-                            System.out.println("Word not found.");
-                        }
-                    }
-                    case 4 -> t1.printDictionary();
-                    default -> System.out.println("Invalid choice.");
-                }
-                System.out.println("\nEnter the number which corresponds to the operation you want.");
-                System.out.println("1. Insert a word\n2. Delete a word\n3. Search for a word\n4. Print the dictionary\n5. Exit");
-                choice = input.nextInt();
-            }
-            System.out.println("Height: "+t1.getHeight());
+
+            dictionaryManipulationTest(testDictionary);
         }
 
         catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("******Error: file not found.******");
+            System.out.println("******Exception: file not found and/or inaccessible.******");
+            fileDictionaryTest();
+        }
+    }
+
+    public static void oneWordDictionaryTest() {
+        userInput = new Scanner(System.in);
+        System.out.print("\nEnter a word for the dictionary to be initialized with> ");
+        Dictionary testDictionary = new Dictionary(userInput.next());
+        System.out.println("Dictionary created and initialized successfully.");
+
+        dictionaryManipulationTest(testDictionary);
+    }
+
+    public static void emptyDictionaryTest() {
+        Dictionary testDictionary = new Dictionary();
+        System.out.println("\nEmpty dictionary created successfully.");
+
+        dictionaryManipulationTest(testDictionary);
+    }
+
+    public static void dictionaryManipulationTest(Dictionary dictionary) {
+        try {
+            userInput = new Scanner(System.in);
+            System.out.println("\n" +
+                    "1. Insert a word\n" +
+                    "2. Delete a word\n" +
+                    "3. Search for a word\n" +
+                    "4. Search for similar words\n" +
+                    "5. Print the dictionary\n" +
+                    "6. Save the dictionary to a new text file\n" +
+                    "7. Exit");
+            System.out.print("\nEnter the number which corresponds to the operation you want> ");
+            int choice = userInput.nextInt();
+
+            while (choice != 7) {
+                switch (choice) {
+                    case 1 -> {
+                        System.out.print("add new word> ");
+                        dictionary.addWord(userInput.next());
+                        System.out.println("Word added successfully.");
+                    }
+
+                    case 2 -> {
+                        System.out.print("remove word> ");
+                        dictionary.deleteWord(userInput.next());
+                        System.out.println("Word removed successfully.");
+                    }
+
+                    case 3 -> {
+                        System.out.print("check word> ");
+
+                        if (dictionary.searchWord(userInput.next()))
+                            System.out.println("Word found.");
+
+                        else
+                            System.out.println("Word not found.");
+                    }
+                    case 4 -> {
+                        System.out.print("search similar words> ");
+                        dictionary.findSimilar(userInput.next());
+                    }
+
+                    case 5 -> dictionary.printDictionary();
+
+                    case 6 -> {
+                        System.out.print("Save Updated Dictionary (Y/N)> ");
+                        if (userInput.next().equals("Y")) {
+                            System.out.print("Enter filename> ");
+                            dictionary.exportDictionary(userInput.next());
+                            System.out.println("Dictionary saved successfully.");
+                        }
+                    }
+                    default -> System.out.println("Invalid choice.");
+                }
+
+                System.out.println("\n" +
+                        "1. Insert a word\n" +
+                        "2. Delete a word\n" +
+                        "3. Search for a word\n" +
+                        "4. Search for similar words\n" +
+                        "5. Print the dictionary\n" +
+                        "6. Save the dictionary to a new text file\n" +
+                        "7. Exit");
+                System.out.print("\nEnter the number which corresponds to the operation you want> ");
+
+                choice = userInput.nextInt();
+                if (choice == 7) userInput.close(); // No need to keep the scanner object alive anymore
+            }
         }
 
         catch (WordAlreadyExistsException e) {
-            e.printStackTrace();
-            System.out.println("******Error: word already exists.******");
+            System.out.println("******Exception: word already exists.******");
+            dictionaryManipulationTest(dictionary);
         }
 
         catch (WordNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("******Error: word not found in dictionary.******");
+            System.out.println("******Exception: word not found in dictionary.******");
+            dictionaryManipulationTest(dictionary);
+        }
+
+        catch (InputMismatchException e) { // For when the user choice is not an integer value
+            System.out.println("******Exception: your choice is not an integer value.******");
+            dictionaryManipulationTest(dictionary);
+        }
+
+        catch (FileNotFoundException e) {
+            System.out.println("******Exception: file not found and/or inaccessible.******");
+            dictionaryManipulationTest(dictionary);
         }
 
         catch (Exception e) {
             e.printStackTrace();
-            System.out.println("******Unknown error.******");
+            System.out.println("******Exception: Unknown error.******");
         }
     }
 }

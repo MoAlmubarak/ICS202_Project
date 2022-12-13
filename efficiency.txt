@@ -1,0 +1,165 @@
+public Dictionary(String s) {
+        super(new BSTNode<String>(s));
+    }
+
+-----------------------------> its complexcity: O(1).
+
+=============================================================================================
+
+public Dictionary() {
+        super();
+    }
+
+-----------------------------> its complexcity: O(1).
+
+=============================================================================================
+
+public Dictionary(File f) throws FileNotFoundException {
+        Scanner fileScanner = new Scanner(f);
+        while (fileScanner.hasNextLine())
+            this.insertAVL(fileScanner.nextLine());
+        fileScanner.close();
+    }
+
+-----------------------------> its complexcity: O(n) because it will read n words from the file.
+
+=============================================================================================
+
+public boolean searchWord(String s) {
+        return this.search(s) != null;
+    }
+
+-----------------------------> its complexcity: O(lgn) (log to the base 2 of n) in the worst case.
+
+=============================================================================================
+
+public void addWord(String s) throws InvalidDnDOperationException {
+        if (this.search(s) == null)
+            this.insertAVL(s);
+        else
+            throw new WordAlreadyExistsException("Word already exists.");
+    }
+-----------------------------> its complexcity: O(lg^2 n) (log squared to the base 2 of n)
+because in the worst case the search method takes O(lgn), and insertion takes O(lgn).
+
+=============================================================================================
+
+public void deleteWord(String s) throws InvalidDnDOperationException {
+        if (this.search(s) == null)
+            throw new WordNotFoundException("Word does not exist.");
+        else
+            this.deleteAVL(s);
+    }
+-----------------------------> its complexcity: O(lg^2 n) (log squared to the base 2 of n),
+because in the worst case the search method takes O(lgn), and insertion takes O(lgn)
+
+=============================================================================================
+
+ // save the dictionary in a new text file, using in-order traversing of the dictionary
+    public void exportDictionary(String fileName) throws FileNotFoundException {
+        PrintWriter file = new PrintWriter(fileName);
+        exportDictionaryAuxiliary(this.root, file);
+        file.close();
+        }
+
+    // recursive helper method for the above method (traversing the dictionary in-order)
+    public void exportDictionaryAuxiliary(BSTNode<String> p, PrintWriter file) {
+        if (p != null) {
+            exportDictionaryAuxiliary(p.left, file);
+            file.print(p.el + "\n");
+            exportDictionaryAuxiliary(p.right, file);
+        }
+    }
+
+-----------------------------> its complexcity: O(lgn) (log squared to the base 2 of n)
+because in-order traversal of the AVL tree takes O(lgn) and writing to the file takes O(1).
+
+=============================================================================================
+
+// helper method for finding the similar words.
+    public String findSimilar (String s) {
+        Stack<String> similarWordsStack = new Stack<String>();
+        Stack<String> flippedStack = new Stack<String>(); // Flipping the stack to preserve the original word order.
+        this.findSimilar(s, this.root, similarWordsStack);
+
+        while (!similarWordsStack.isEmpty())
+            flippedStack.push(similarWordsStack.pop());
+
+        String formattedString = flippedStack.pop();
+        while (!flippedStack.isEmpty())
+            formattedString += ", " + flippedStack.pop();
+        formattedString += ".";
+
+
+        return formattedString;
+    }
+
+ // finds the similar words in the dictionary, and prints them.
+    private void findSimilar (String s, BSTNode<String> node, Stack stack) {
+        if (node == null)
+            return;
+
+        // search in the left subtree.
+        findSimilar (s, node.left, stack);
+
+        if (node.el.length() == s.length()) {
+            int differentLetter = 0;
+
+            for (int i = 0; i < s.length(); i++)
+                if (s.charAt(i) != node.el.charAt(i))
+                    differentLetter++;
+
+            if (differentLetter == 1)
+                stack.push(node.el);
+        }
+
+        // To search for similar words which differ by 1 letter, in case the length of the input word
+        // is greater than the similar word by 1
+        else if ((node.el.length() + 1) == s.length()) {
+            int differentLetter = 0;
+            for (int i = 0; i < (s.length() - 1); i++) {
+                if (s.charAt(i) != node.el.charAt(i)) {
+                    differentLetter++;
+
+                    for (int j = i; j < (s.length() - 1); j++) {
+                        if (s.charAt(j + 1) != node.el.charAt(j)) {
+                            differentLetter++;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            if (differentLetter == 1 || differentLetter == 0)
+                stack.push(node.el);
+        }
+
+        // To search for similar words which differ by 1 letter, in case the length of the input word
+        // is less than the similar word by 1
+        else if (node.el.length() == (s.length() + 1)) {
+            int differentLetter = 0;
+            for (int i = 0; i < (s.length()); i++) {
+                if (s.charAt(i) != node.el.charAt(i)) {
+                    differentLetter++;
+
+                    for (int j = i; j < (s.length()); j++) {
+                        if (s.charAt(j) != node.el.charAt(j+1)){
+                            differentLetter++;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (differentLetter == 1 || differentLetter == 0)
+                stack.push(node.el);
+        }
+
+        // search in the right subtree.
+        findSimilar (s, node.right, stack);
+    }.
+
+
+-----------------------------> for searching takes O(lgn), for each loop, takes O(k) which k  is the length of the word,
+so its complexcity O(lgn) + O(k)  which ends up to be O(k).

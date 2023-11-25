@@ -1,6 +1,10 @@
 # ICS202_Project Term 221
 ## Design and Implement a Dictionary Data Structure
 
+**Contributors:**
+- Mohammed Almubarak - CS
+- Hussain Alkhalaif - COE
+
 Please refrain from copying and pasting the solution for the following reasons:
 1. Copy-pasting will hinder your learning experience.
 2. Copying and pasting is prohibited by university rules and considered a violation of academic integrity.

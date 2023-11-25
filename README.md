@@ -2,8 +2,8 @@
 ## Design and Implement a Dictionary Data Structure
 
 **Contributors:**
-- Mohammed Almubarak - CS
-- Hussain Alkhalaif - COE
+- Mohammed Almubarak - S2020
+- Hussain Alkhalaif - S2020
 
 Please refrain from copying and pasting the solution for the following reasons:
 1. Copy-pasting will hinder your learning experience.

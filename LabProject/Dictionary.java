@@ -71,12 +71,17 @@ public class Dictionary extends AVLTree<String> {
         while (!similarWordsStack.isEmpty())
             flippedStack.push(similarWordsStack.pop());
 
-        String formattedString = flippedStack.pop();
-        while (!flippedStack.isEmpty())
-            formattedString += ", " + flippedStack.pop();
-        formattedString += ".";
+        if (!flippedStack.isEmpty()) {
+            String formattedString = flippedStack.pop();
+            while (!flippedStack.isEmpty())
+                formattedString += ", " + flippedStack.pop();
+            formattedString += ".";
 
-        return formattedString;
+            return formattedString;
+        }
+
+        else
+            return "No similar words found.";
     }
 
     // helper method that finds similar words in the dictionary, and stores them in the given stack.
